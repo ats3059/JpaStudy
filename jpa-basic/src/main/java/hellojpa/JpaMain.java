@@ -1,5 +1,7 @@
 package hellojpa;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -24,12 +26,16 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            Member member2 = em.find(Member.class,1L);
-            System.out.println(member2.getName());
-            List<Member> list = member2.getTeam().getList();
-            for (Member member1 : list) {
-                System.out.println(member1.getName());
-            }
+            Member test = em.find(Member.class , member.getId());
+            System.out.println(test.getTeam().getClass());
+            Team team1 = test.getTeam();
+            Hibernate.initialize(team1);
+            System.out.println("=================================");
+            System.out.println(team1.getTeamName());
+
+
+
+
 
 
 
@@ -47,4 +53,7 @@ public class JpaMain {
 
 
     }
+
+
+
 }
