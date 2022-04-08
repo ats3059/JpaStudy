@@ -15,6 +15,12 @@ public class Member {
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
+    @Embedded
+    private Address address;
+    @Embedded
+    private Period period;
+
+
     public Long getId() {
         return id;
     }
@@ -37,5 +43,21 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Period period) {
+        this.period = period;
     }
 }

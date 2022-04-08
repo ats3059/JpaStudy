@@ -10,6 +10,7 @@ import java.util.List;
 public class Team {
     @Id
     private String teamName;
+    private String teamNum;
     @OneToMany(mappedBy = "team")
     private List<Member> list = new ArrayList<>();
 
@@ -27,5 +28,13 @@ public class Team {
 
     public void setList(List<Member> list) {
         this.list = list;
+    }
+
+    public String getTeamNum() {
+        return teamNum;
+    }
+
+    public void setTeamNum(String teamNum) {
+        this.teamNum = teamNum;
     }
 }
