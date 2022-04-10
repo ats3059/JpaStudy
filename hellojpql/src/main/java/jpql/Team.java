@@ -11,7 +11,7 @@ public class Team {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     private List<Member> member = new ArrayList<>();
 
     public Long getId() {
@@ -34,7 +34,8 @@ public class Team {
         return member;
     }
 
-    public void setMember(List<Member> member) {
-        this.member = member;
+    public void createCascade(Member member){
+        this.member.add(member);
+        member.setTeam(this);
     }
 }

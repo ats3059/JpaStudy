@@ -39,8 +39,9 @@ public class Order {
         return member;
     }
 
-    public void setMember(Member member) {
+    public void createOrder(Member member){
         this.member = member;
+        member.getOrder().add(this);
     }
 
     public Address getAddress() {
@@ -50,4 +51,7 @@ public class Order {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+
+
 }
