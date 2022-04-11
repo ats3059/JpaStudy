@@ -1,72 +1,37 @@
 package jpabook.jpashop.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ORDERS")
+@Table(name = "orders")
+@Getter
+@Setter
 public class Order {
-    @Id
-    @GeneratedValue
-    @Column(name="ORDER_ID")
+    @Id @GeneratedValue
+    @Column(name = "order_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    Member member;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    //hibernate 최신버전에서는 JAVA8 LocalDateTime , LocalDateTime 전부 매핑함
+    @OneToOne
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
+
     private LocalDateTime orderDate;
+
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status;// 주문상태 [ORDER,CANCEL]
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public void addOrderItem(OrderItem oi) {
-        orderItems.add(oi);
-        oi.setOrder(this);
-    }
 }

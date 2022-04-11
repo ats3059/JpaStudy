@@ -1,9 +1,6 @@
 package jpql;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,28 +17,40 @@ public class JpaMain {
         try{
             Team team = new Team();
             team.setName("TeamA");
-//            em.persist(team);
-            for(int i = 0; i < 11; i++){
-                Member member = new Member();
-                member.setUsername("Member"+i);
-                member.setAge(i);
-                member.setTeam(team);
-//                em.persist(member);
-                team.createCascade(member);
-            }
+            Team teamb = new Team();
+            teamb.setName("TeamB");
+            Team teamc = new Team();
+            teamc.setName("TeamC");
+
+            createCascdeTeam(team);
+            createCascdeTeam(teamb);
+            createCascdeTeam(teamc);
+
             em.persist(team);
+            em.persist(teamb);
+            em.persist(teamc);
+            em.flush();
+            em.clear();
 
+            TypedQuery<Team> query = em.createQuery("select distinct t from Member m join  m.team t", Team.class);
 
-            List<Member> result = em.createQuery("select m from Member m join m.team t on m.username = 'Member3'"
-                    ,Member.class)
-                    .getResultList();
-            team.setId(12L);
+            List<Team> resultList = query.getResultList();
 
-            System.out.println(result.size());
-            for (Member member : result) {
-                System.out.println(member.getUsername());
-                System.out.println(member.getTeam().getName());
+            for (Team mm : resultList) {
+                mm.getMember().forEach(System.out::println);
             }
+//
+//            List<Team> result = em.createQuery("select t from Team t"
+//                    ,Team.class)
+//                    .getResultList();
+//
+//            for (Team t : result) {
+//                List<Member> member = t.getMember();
+//                for (Member m : member) {
+//                    System.out.println(m + " TeamId =  " + t.getId());
+//                }
+//
+//            }
 
             tx.commit();
         }catch (Exception e){
@@ -55,6 +64,16 @@ public class JpaMain {
 
 
 
+    }
+
+    private static void createCascdeTeam(Team team) {
+        for(int i = 0; i < 4; i++){
+            Member member = new Member();
+            member.setUsername("Member"+i);
+            member.setAge(i);
+            member.setTeam(team);
+            team.createCascade(member);
+        }
     }
 
 }
