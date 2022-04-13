@@ -1,13 +1,14 @@
 package jpabook.jpashop;
 
 import jpabook.jpashop.domain.Member;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Repository
-public class MemberRepository {
+public class TestMemberRepository {
 
     @PersistenceContext
     private EntityManager em;
