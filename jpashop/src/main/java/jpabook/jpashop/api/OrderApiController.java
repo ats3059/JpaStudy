@@ -51,6 +51,8 @@ public class OrderApiController {
         //중복성이 적을때 사용 페이징 불가
         // 일대다 관계에서는 페이징을 사용하면 안된다.
         //중복성 문제도 있지만 DB에서 데이터를 전부 퍼올려서 메모리에서 페이징을 하기 때문이다.
+        // 중복성 문제는 distinct 사용하면 JPA에서 primary key기준으로 중복을 제거한다.
+        // ★★★★ 동등성 보장
         List<Order> orders = orderRepository.findAllWithItem();
         return orders.stream().map(OrderDto::new).collect(Collectors.toList());
     }
