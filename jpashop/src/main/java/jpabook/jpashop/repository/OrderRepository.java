@@ -2,6 +2,7 @@ package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -84,5 +85,12 @@ public class OrderRepository {
                 " join fetch oi.item i " , Order.class).getResultList();
 
 
+    }
+
+    @BatchSize(size = 100)
+    public List<Order> findAllSome(List<Long> ids){
+        return em.createQuery("select o from Order o where o.id in :ids")
+                .setParameter("ids" ,ids)
+                .getResultList();
     }
 }

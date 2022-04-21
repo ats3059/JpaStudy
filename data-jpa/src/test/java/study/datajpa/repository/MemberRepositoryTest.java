@@ -13,6 +13,7 @@ import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,6 +29,8 @@ public class MemberRepositoryTest {
     MemberRepository memberRepository;
     @Autowired
     TeamRepository teamRepository;
+    @Autowired
+    EntityManager em;
 
     @Test
     public void testMember() {
@@ -119,7 +122,7 @@ public class MemberRepositoryTest {
         Team team = new Team("teamA");
         teamRepository.save(team);
 
-        Member m1 = new Member("AAA", 10,team);
+        Member m1 = new Member("AAA", 10, team);
         memberRepository.save(m1);
 
         List<MemberDto> memberDto = memberRepository.findMemberDto();
@@ -129,13 +132,13 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    public void findByNames(){
+    public void findByNames() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("AAA", 20);
         memberRepository.save(m1);
         memberRepository.save(m2);
 
-        List<Member> usernameList = memberRepository.findByNames(Arrays.asList("AAA","BBB"));
+        List<Member> usernameList = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
 
         for (Member member : usernameList) {
             System.out.println(member);
@@ -143,7 +146,7 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    public void returnType(){
+    public void returnType() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("BBB", 20);
         memberRepository.save(m1);
@@ -164,7 +167,7 @@ public class MemberRepositoryTest {
         memberRepository.save(new Member("member5", 10));
         int age = 10;
 
-        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+        PageRequest pageRequest = PageRequest.of(1, 3, Sort.by(Sort.Direction.ASC, "username"));
 
         //when
         Page<Member> page = memberRepository.findByAge(age, pageRequest);
@@ -172,18 +175,64 @@ public class MemberRepositoryTest {
         //then
         List<Member> content = page.getContent();
         long totalElements = page.getTotalElements();
+        for (Member member : content) {
+            System.out.println(member);
+        }
 
-        assertThat(content.size()).isEqualTo(3);
-        assertThat(totalElements).isEqualTo(5L);
-        assertThat(page.getNumber()).isEqualTo(0);
-        assertThat(page.getTotalPages()).isEqualTo(2);
-        assertThat(page.isFirst()).isTrue();
-        assertThat(page.hasNext()).isTrue();
+        assertThat(content.size()).isEqualTo(2);
+//        assertThat(totalElements).isEqualTo(5L);
+//        assertThat(page.getNumber()).isEqualTo(0);
+//        assertThat(page.getTotalPages()).isEqualTo(2);
+//        assertThat(page.isFirst()).isTrue();
+//        assertThat(page.hasNext()).isTrue();
 
+    }
 
+    @Test
+    public void bulkUpdate(){
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        em.flush();
+        em.clear();
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+
+    }
+
+    @Test
+    public void fetchTest(){
+        Team team = new Team("teamA");
+        teamRepository.save(team);
+        memberRepository.save(new Member("member1", 10,team));
+        memberRepository.save(new Member("member1", 19,team));
+
+        List<Member> members = memberRepository.findAllByUsername("member1");
+
+        for (Member member : members) {
+            System.out.println(member);
+            System.out.println(member.getTeam().getName());
+            System.out.println(member.getTeam().getClass());
+        }
 
 
     }
+
+    @Test
+    public void callCustom(){
+        List<Member> result = memberRepository.findMemberCustom();
+    }
+
+
+
 
 
 

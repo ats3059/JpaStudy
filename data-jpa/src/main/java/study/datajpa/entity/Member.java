@@ -13,7 +13,8 @@ import javax.persistence.*;
         query = "select m from Member m where m.username = :username"
 
 )
-public class Member {
+
+public class Member extends BaseEntity{
 
     public Member(String username) {
         this.username = username;

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.repository.MemberRepository;
 
 import javax.persistence.EntityManager;
 
@@ -19,6 +20,9 @@ class MemberTest {
 
     @Autowired
     EntityManager em;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     public void testEntity(){
@@ -49,7 +53,27 @@ class MemberTest {
         });
 
     }
+    @Test
+    public void JpaEventBaseEntity() throws Exception{
+        //given
+        Member member = new Member("member1");
+        memberRepository.save(member); // @PrePersist
 
+        Thread.sleep(1000);
+        member.setUsername("member2");
+
+        em.flush(); //@PreUpdate
+        em.clear();
+
+        //when
+        Member member1 = memberRepository.findById(member.getId()).get();
+        //then
+
+        System.out.println(member1.getCreatedDate());
+        System.out.println(member1.getLastModifiedDate());
+
+
+    }
 
 
 }
