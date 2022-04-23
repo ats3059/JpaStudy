@@ -1,6 +1,5 @@
 package study.datajpa.repository;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
+import study.datajpa.dto.UsernameOnlyDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
@@ -230,6 +230,23 @@ public class MemberRepositoryTest {
     public void callCustom(){
         List<Member> result = memberRepository.findMemberCustom();
     }
+
+    @Test
+    public void callProjection(){
+        Member member = memberRepository.save(new Member("member1", 10));
+//        memberRepository.findProjectionsByUsername("member1");
+//        memberRepository.findProjection("member1");
+        em.flush();
+        em.clear();
+        Optional<Member> optionalMember = memberRepository.findById(member.getId());
+        Member member1 = optionalMember.get();
+        System.out.println(member1);
+        member1.setUsername("mememememememem!!!!");
+
+
+    }
+
+
 
 
 

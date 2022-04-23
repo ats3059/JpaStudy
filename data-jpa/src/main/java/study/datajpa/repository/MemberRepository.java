@@ -1,6 +1,5 @@
 package study.datajpa.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -9,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
+import study.datajpa.dto.UsernameOnlyDto;
 import study.datajpa.entity.Member;
 
 import java.util.List;
@@ -57,6 +57,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> ,MemberRep
 
     @EntityGraph(attributePaths = {"team"})
     List<Member> findAllByUsername(String username);
+
+    List<UsernameOnly> findProjectionsByUsername(String username);
+
+    List<UsernameOnlyDto> findProjecasdfByUsername(String username);
+    List<UsernameOnlyDto> findProjecasdfByAge(String username);
+
 
 
 }
