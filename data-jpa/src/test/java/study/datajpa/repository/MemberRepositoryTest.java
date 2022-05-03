@@ -169,6 +169,7 @@ public class MemberRepositoryTest {
 
         PageRequest pageRequest = PageRequest.of(1, 3, Sort.by(Sort.Direction.ASC, "username"));
 
+
         //when
         Page<Member> page = memberRepository.findByAge(age, pageRequest);
 

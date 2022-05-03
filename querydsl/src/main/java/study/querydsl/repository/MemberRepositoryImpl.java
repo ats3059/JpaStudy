@@ -1,30 +1,32 @@
 package study.querydsl.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import study.querydsl.dto.MemberSearchCondition;
-import study.querydsl.dto.MemberTeamDto;
-import study.querydsl.dto.QMemberTeamDto;
+import study.querydsl.dto.*;
+import study.querydsl.entity.QMember;
 
 import javax.persistence.EntityManager;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.StringUtils.hasText;
 import static study.querydsl.entity.QMember.member;
 import static study.querydsl.entity.QTeam.team;
 
+@RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
-
-    public MemberRepositoryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     @Override
     public List<MemberTeamDto> search(MemberSearchCondition condition){
@@ -105,6 +107,10 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     private BooleanExpression usernameEq(String username) {
         return hasText(username) ? member.username.eq(username) : null;
     }
+
+
+
+
 
 
 }
