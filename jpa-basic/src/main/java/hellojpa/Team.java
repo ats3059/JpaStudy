@@ -3,6 +3,7 @@ package hellojpa;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
