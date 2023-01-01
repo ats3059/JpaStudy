@@ -32,13 +32,19 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            TypedQuery<Team> query = em.createQuery("select distinct t from Member m join  m.team t", Team.class);
+            List<Member> select_m_from_member_m = em.createQuery("select m from Member m where m.id = :userId", Member.class)
+                    .setParameter("userId", 2L)
+                    .getResultList();
+            System.out.println(select_m_from_member_m.size());
 
-            List<Team> resultList = query.getResultList();
 
-            for (Team mm : resultList) {
-                mm.getMember().forEach(System.out::println);
-            }
+//            TypedQuery<Team> query = em.createQuery("select distinct t from Member m join  m.team t", Team.class);
+//
+//            List<Team> resultList = query.getResultList();
+//
+//            for (Team mm : resultList) {
+//                mm.getMember().forEach(System.out::println);
+//            }
 //
 //            List<Team> result = em.createQuery("select t from Team t"
 //                    ,Team.class)
