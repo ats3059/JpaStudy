@@ -30,6 +30,16 @@ public class JpaMain {
             em.flush();
             em.clear();
 
+//            List<Team> resultList = em.createQuery("select t from Member m join m.team t", Team.class).getResultList();
+//            for (Team s : resultList) {
+//                System.out.println(s);
+//            }
+
+//            List<Member> memberList = em.createQuery("select m from Team t join t.member m", Member.class).getResultList();
+//            for (Member s : memberList) {
+//                System.out.println(s);
+//            }
+
             // N+1 상황 jpql 사용하여 멤버만 가져왔을 때 해당 멤버 엔티티 내부의 팀은 현재 프록시 ( 레이지로딩 상태 )
 //            List<Member> memberList = em.createQuery("select m from Member m", Member.class).getResultList();
 //            for (Member member : memberList) {
@@ -52,9 +62,9 @@ public class JpaMain {
             // 이유는 jpa에서 일단 연관관계에 있는 데이터들( 뻥튀기된 데이터 )을 전부 퍼올려서 애플리케이션에서 같은 pk를 가진
             // 1에 해당하는 엔티티의 컬렉션 내부에 N관계의 데이터들을 전부 넣어주기 때문 ( distinct 사용 시 영속성 컨텍스트에서 pk가 같다면 지워준다 )
             // + sql 자체에 distinct 들어감
-            List<Team> distinctList = em.createQuery("select distinct t from Team t join fetch t.member", Team.class).getResultList();
+//            List<Team> distinctList = em.createQuery("select distinct t from Team t join fetch t.member", Team.class).getResultList();
             //제대로 3개 출력
-            System.out.println(distinctList.size());
+//            System.out.println(distinctList.size());
 
             tx.commit();
         }catch (Exception e){
